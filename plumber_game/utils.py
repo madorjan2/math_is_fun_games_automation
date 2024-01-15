@@ -84,7 +84,6 @@ class Board:
 			x = pos[0] + facing[0]
 			y = pos[1] + facing[1]
 			curr_pos = (x, y)
-			print(curr_pos)
 			if curr_pos == self.end:
 				return True
 			elif (x not in range(len(self.grid[0])) or
