@@ -8,10 +8,33 @@ def task_to_list(task):
 		task_list.append(int_list)
 	return task_list
 
-class Tile():
+def create_str_list_from(task_list, longest):
+	str_task_data = []
+	for task in task_list:
+		str_task = ''
+		for i in range(longest):
+			if len(task) < longest - i:
+				str_task += '      '
+			else:
+				str_number = str(task[i - (longest - len(task))])
+				str_task += ' ' * (len(str_number) < 3) + str_number + ' ' * (len(str_number) == 1) + '   '
+		str_task_data.append(str_task[:-3])
+	return str_task_data
+
+
+class Tile:
 	def __init__(self):
 		self.fill = 'unknown'
 		self.final = False
+
+	def __str__(self):
+		if self.fill == 'black':
+			return '█'
+		elif self.fill == 'white':
+			return 'x'
+		else:
+			return '·'
+
 
 	def is_final(self):
 		return self.final
@@ -54,14 +77,21 @@ class Nonogram:
 
 	def __str__(self):
 		out = ''
-		for x in range(self.size):
-			for y in range(self.size):
-				tile_fill = self.grid[x][y].get_fill()
-				if tile_fill == 'black':
-					out += '█'
-				elif tile_fill == 'white':
-					out += 'x'
-				else:
-					out += '·'
-			out += '\n'
-
+		longest_row_data = max([len(elem) for elem in self.task_row])
+		longest_column_data = max([len(elem) for elem in self.task_column])
+		str_column_data = create_str_list_from(self.task_column, longest_column_data)
+		str_row_data = create_str_list_from(self.task_row, longest_row_data)
+		line_separator = '─' * (3 * (longest_row_data * 2 - 1) + 4 * (len(self.task_column)) + 1) + '\n'
+		for i in range(longest_column_data * 2 - 1):
+			out += '   ' * (longest_row_data * 2 - 1)
+			for j in range(len(self.task_column)):
+				out += '|' + str_column_data[j][(i * 3):(i * 3) + 3]
+			out +='|\n'
+		for x in range(len(self.task_row)):
+			out += line_separator
+			out += str_row_data[x]
+			for y in range(len(self.task_column)):
+				out += '|' + str(self.grid[x][y]) * 3
+			out += '|\n'
+		out += line_separator
+		return out
