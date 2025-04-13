@@ -79,7 +79,6 @@ class Board:
 		return solution
 
 	def solve_for_next(self, pos, facing, touched, solved=False):
-		# print('\n' + str(self))
 		if not solved:
 			x = pos[0] + facing[0]
 			y = pos[1] + facing[1]
